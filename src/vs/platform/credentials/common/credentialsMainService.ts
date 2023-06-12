@@ -17,10 +17,10 @@ interface ChunkedPassword {
 
 export type KeytarModule = typeof import('keytar');
 
-export abstract class BaseCredentialsMainService extends Disposable implements ICredentialsMainService {
+export abstract class BaseKeytarCredentialsMainService extends Disposable implements ICredentialsMainService {
 
 	private static readonly MAX_PASSWORD_LENGTH = 2500;
-	private static readonly PASSWORD_CHUNK_SIZE = BaseCredentialsMainService.MAX_PASSWORD_LENGTH - 100;
+	private static readonly PASSWORD_CHUNK_SIZE = BaseKeytarCredentialsMainService.MAX_PASSWORD_LENGTH - 100;
 	declare readonly _serviceBrand: undefined;
 
 	private _onDidChangePassword: Emitter<ICredentialsChangeEvent> = this._register(new Emitter());
@@ -132,7 +132,7 @@ export abstract class BaseCredentialsMainService extends Disposable implements I
 		await this.doDeletePassword(keytar, service, account);
 
 		// if it's a short password, just store it
-		if (password.length <= BaseCredentialsMainService.PASSWORD_CHUNK_SIZE) {
+		if (password.length <= BaseKeytarCredentialsMainService.PASSWORD_CHUNK_SIZE) {
 			await retry(() => keytar.setPassword(service, account, password), 50, 3);
 			this.logService.trace('Set password from keytar for account:', account);
 			return;
@@ -143,8 +143,8 @@ export abstract class BaseCredentialsMainService extends Disposable implements I
 		let chunk = 0;
 		let hasNextChunk = true;
 		while (hasNextChunk) {
-			const passwordChunk = password.substring(index, index + BaseCredentialsMainService.PASSWORD_CHUNK_SIZE);
-			index += BaseCredentialsMainService.PASSWORD_CHUNK_SIZE;
+			const passwordChunk = password.substring(index, index + BaseKeytarCredentialsMainService.PASSWORD_CHUNK_SIZE);
+			index += BaseKeytarCredentialsMainService.PASSWORD_CHUNK_SIZE;
 			hasNextChunk = password.length - index > 0;
 
 			const content: ChunkedPassword = {

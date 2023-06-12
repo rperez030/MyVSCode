@@ -8,9 +8,9 @@ import { ILogService } from 'vs/platform/log/common/log';
 import { INativeEnvironmentService } from 'vs/platform/environment/common/environment';
 import { IProductService } from 'vs/platform/product/common/productService';
 import { IWindowsMainService } from 'vs/platform/windows/electron-main/windows';
-import { BaseCredentialsMainService, KeytarModule } from 'vs/platform/credentials/common/credentialsMainService';
+import { BaseKeytarCredentialsMainService, KeytarModule } from 'vs/platform/credentials/common/credentialsMainService';
 
-export class CredentialsNativeMainService extends BaseCredentialsMainService {
+export class ElectronCredentialsNativeMainService extends BaseKeytarCredentialsMainService {
 
 	constructor(
 		@ILogService logService: ILogService,

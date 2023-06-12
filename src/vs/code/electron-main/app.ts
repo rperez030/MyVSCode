@@ -97,7 +97,7 @@ import { IWorkspacesService } from 'vs/platform/workspaces/common/workspaces';
 import { IWorkspacesHistoryMainService, WorkspacesHistoryMainService } from 'vs/platform/workspaces/electron-main/workspacesHistoryMainService';
 import { WorkspacesMainService } from 'vs/platform/workspaces/electron-main/workspacesMainService';
 import { IWorkspacesManagementMainService, WorkspacesManagementMainService } from 'vs/platform/workspaces/electron-main/workspacesManagementMainService';
-import { CredentialsNativeMainService } from 'vs/platform/credentials/electron-main/credentialsMainService';
+import { ElectronCredentialsNativeMainService } from 'vs/platform/credentials/electron-main/credentialsMainService';
 import { IPolicyService } from 'vs/platform/policy/common/policy';
 import { PolicyChannel } from 'vs/platform/policy/common/policyIpc';
 import { IUserDataProfilesMainService } from 'vs/platform/userDataProfile/electron-main/userDataProfile';
@@ -912,7 +912,7 @@ export class CodeApplication extends Disposable {
 		services.set(INativeHostMainService, new SyncDescriptor(NativeHostMainService, undefined, false /* proxied to other processes */));
 
 		// Credentials
-		services.set(ICredentialsMainService, new SyncDescriptor(CredentialsNativeMainService));
+		services.set(ICredentialsMainService, new SyncDescriptor(ElectronCredentialsNativeMainService));
 
 		// Webview Manager
 		services.set(IWebviewManagerService, new SyncDescriptor(WebviewMainService));
