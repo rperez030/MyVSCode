@@ -24,7 +24,8 @@ export function resolveCommonProperties(
 	version: string | undefined,
 	machineId: string | undefined,
 	isInternalTelemetry: boolean,
-	product?: string
+	product?: string,
+	releaseInfo?: Record<string, string | undefined>
 ): ICommonProperties {
 	const result: ICommonProperties = Object.create(null);
 
@@ -83,6 +84,15 @@ export function resolveCommonProperties(
 	if (platformDetail) {
 		// __GDPR__COMMON__ "common.platformDetail" : { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
 		result['common.platformDetail'] = platformDetail;
+	}
+
+	if (platform === Platform.Linux) {
+		// __GDPR__COMMON__ "common.platformVersionID" : { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+		result['common.platformVersionID'] = releaseInfo?.version_id;
+		// __GDPR__COMMON__ "common.platformID" : { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+		result['common.platformID'] = releaseInfo?.id;
+		// __GDPR__COMMON__ "common.platformIDLike" : { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+		result['common.platformIDLike'] = releaseInfo?.id_like;
 	}
 
 	return result;

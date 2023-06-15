@@ -21,6 +21,7 @@ import { IProcessEnvironment, isLinux, isLinuxSnap, isMacintosh, isWindows, OS }
 import { assertType } from 'vs/base/common/types';
 import { URI } from 'vs/base/common/uri';
 import { generateUuid } from 'vs/base/common/uuid';
+import { getOSReleaseInfo } from 'vs/base/node/osReleaseInfo';
 import { registerContextMenuListener } from 'vs/base/parts/contextmenu/electron-main/contextmenu';
 import { getDelayedChannel, ProxyChannel, StaticRouter } from 'vs/base/parts/ipc/common/ipc';
 import { Server as ElectronIPCServer } from 'vs/base/parts/ipc/electron-main/ipc.electron';
@@ -971,7 +972,10 @@ export class CodeApplication extends Disposable {
 			const isInternal = isInternalTelemetry(this.productService, this.configurationService);
 			const channel = getDelayedChannel(sharedProcessReady.then(client => client.getChannel('telemetryAppender')));
 			const appender = new TelemetryAppenderClient(channel);
-			const commonProperties = resolveCommonProperties(release(), hostname(), process.arch, this.productService.commit, this.productService.version, machineId, isInternal);
+			const osReleaseInfo = await getOSReleaseInfo(this.logService.error.bind(this.logService));
+			const commonProperties = resolveCommonProperties(
+				release(), hostname(), process.arch, this.productService.commit, this.productService.version,
+				machineId, isInternal, undefined, osReleaseInfo);
 			const piiPaths = getPiiPathsFromEnvironment(this.environmentMainService);
 			const config: ITelemetryServiceConfig = { appenders: [appender], commonProperties, piiPaths, sendErrorTelemetry: true };
 
